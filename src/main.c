@@ -6,7 +6,7 @@
 /*   By: cbagdon <cbagdon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 14:54:29 by cbagdon           #+#    #+#             */
-/*   Updated: 2019/04/08 14:15:21 by cbagdon          ###   ########.fr       */
+/*   Updated: 2019/04/10 17:29:31 by cbagdon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 **	arrow key, then make the appropriate movement. We then redraw.
 */
 
-static int		term_check()
+static int		term_check(void)
 {
 	char	*term;
 	char	buf[2048];
@@ -63,8 +63,25 @@ static void		reset_term(struct termios old_terminal)
 	tcsetattr(0, TCSANOW, &old_terminal);
 }
 
-int		main(int argc, char *argv[])
+static void		final_print(t_arg *head)
 {
+	while (head)
+	{
+		if (!head->hidden && head->is_selected)
+			ft_printf("%s ", head->name);
+		head = head->next;
+		if (head->is_last)
+		{
+			if (!head->hidden)
+				ft_putchar('\n');
+			break ;
+		}
+	}
+}
+
+int				main(int argc, char *argv[])
+{
+	t_arg				*head;
 	t_arg				*args;
 	struct termios		old_terminal;
 
@@ -76,8 +93,10 @@ int		main(int argc, char *argv[])
 	}
 	setup_term(&old_terminal);
 	args = init_args(argc, argv);
+	head = args;
 	print_args(args);
-	input_loop(args);
+	input_loop(argc, args);
 	reset_term(old_terminal);
+	final_print(head);
 	return (0);
 }

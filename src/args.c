@@ -6,7 +6,7 @@
 /*   By: cbagdon <cbagdon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 12:21:22 by cbagdon           #+#    #+#             */
-/*   Updated: 2019/04/08 13:35:46 by cbagdon          ###   ########.fr       */
+/*   Updated: 2019/04/10 16:51:46 by cbagdon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,13 @@ static t_arg	*new_arg(char *name)
 	t_arg		*new;
 
 	new = (t_arg *)malloc(sizeof(t_arg));
-	new->prev = NULL;
+	new->prev = new;
 	new->name = name;
+	new->hidden = 0;
 	new->is_current = 0;
 	new->is_selected = 0;
 	new->is_last = 1;
-	new->next = NULL;
+	new->next = new;
 	return (new);
 }
 

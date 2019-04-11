@@ -6,7 +6,7 @@
 /*   By: cbagdon <cbagdon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 13:37:25 by cbagdon           #+#    #+#             */
-/*   Updated: 2019/04/08 13:59:25 by cbagdon          ###   ########.fr       */
+/*   Updated: 2019/04/10 17:15:55 by cbagdon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ static void		clear_screen(void)
 
 	clear = tgetstr("cl", NULL);
 	ft_printf(clear);
-	//free(clear);
 }
 
 static void		print_selected(char *str)
@@ -67,14 +66,17 @@ void			print_args(t_arg *head)
 	curr = head;
 	while (curr)
 	{
-		if (curr->is_current && !curr->is_selected)
-			print_current(curr->name);
-		else if (curr->is_selected && !curr->is_current)
-			print_selected(curr->name);
-		else if (curr->is_selected && curr->is_current)
-			print_curr_and_selected(curr->name);
-		else
-			ft_printf("%s\n", curr->name);
+		if (curr->hidden == 0)
+		{
+			if (curr->is_current && !curr->is_selected)
+				print_current(curr->name);
+			else if (curr->is_selected && !curr->is_current)
+				print_selected(curr->name);
+			else if (curr->is_selected && curr->is_current)
+				print_curr_and_selected(curr->name);
+			else
+				ft_printf("%s\n", curr->name);
+		}
 		if (curr->is_last)
 			break ;
 		curr = curr->next;

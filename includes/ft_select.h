@@ -6,7 +6,7 @@
 /*   By: cbagdon <cbagdon@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 14:52:24 by cbagdon           #+#    #+#             */
-/*   Updated: 2019/04/08 13:43:03 by cbagdon          ###   ########.fr       */
+/*   Updated: 2019/04/10 17:31:03 by cbagdon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ typedef struct		s_arg
 {
 	struct s_arg	*prev;
 	char			*name;
+	int				hidden;
 	int				is_current;
 	int				is_selected;
 	int				is_last;
@@ -55,6 +56,6 @@ t_arg				*init_args(int argc, char *argv[]);
 */
 
 void				print_args(t_arg *head);
-void				input_loop(t_arg *arg);
+void				input_loop(int argc, t_arg *arg);
 
 #endif
