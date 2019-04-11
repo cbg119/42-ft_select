@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cbagdon <cbagdon@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cbagdon <cbagdon@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 13:19:11 by cbagdon           #+#    #+#             */
-/*   Updated: 2019/04/10 17:36:52 by cbagdon          ###   ########.fr       */
+/*   Updated: 2019/04/11 15:27:52 by cbagdon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 **	I pass head to each argument so I can actually print them correctly
 */
 
-static void		handle_move(int argc, char move, t_arg **curr, t_arg *head)
+static void		handle_move(int argc, long move, t_arg **curr, t_arg *head)
 {
 	int		i = 1;
 
@@ -55,27 +55,29 @@ static void		handle_delete(int argc, t_arg **curr, t_arg *head)
 	print_args(head);
 }
 
-void			input_loop(int argc, t_arg *head)
+void			input_loop(int argc, t_arg *head, int *clean_exit)
 {
-	char		c;
+	unsigned long		c;
 	t_arg		*curr;
 
 	curr = head;
+	*clean_exit = 1;
 	while (1)
 	{
-		read(0, &c, 1);
-		if (c == '\033')
+		c = 0;
+		read(STDERR_FILENO, &c, 6);
+		if (c == ENTER)
+			break;
+		else if (c == ESCAPE)
 		{
-			read(0, &c, 1);
-			read(0, &c, 1);
-			if (c == RIGHT || c == LEFT)
-				handle_move(argc, c, &curr, head);
+			*clean_exit = 0;
+			break;
 		}
-		else if (c == 32)
+		else if (c == SPACE)
 			handle_select(curr, head);
-		else if (c == 'a')
-			break ;
-		else if (c == 8 || c == 127)
+		else if (c == RIGHT || c == LEFT)
+			handle_move(argc, c, &curr, head);
+		else if (c == DELETE || c == DELETE2)
 			handle_delete(argc, &curr, head);
 	}
 }

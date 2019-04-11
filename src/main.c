@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cbagdon <cbagdon@student.42.fr>            +#+  +:+       +#+        */
+/*   By: cbagdon <cbagdon@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/05 14:54:29 by cbagdon           #+#    #+#             */
-/*   Updated: 2019/04/10 17:29:31 by cbagdon          ###   ########.fr       */
+/*   Created: 2019/04/11 00:01:34 by cbagdon           #+#    #+#             */
+/*   Updated: 2019/04/11 15:09:58 by cbagdon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,17 @@
 **	argument as the first node in the list. From there I will add arguments.
 **	I will then print it. Then, we set up an input loop. If we receive a valid
 **	arrow key, then make the appropriate movement. We then redraw.
+*/
+
+/*
+**	FOR WINDOW RESIZING: To print things out properly, I'm thinking I need to
+**	first get the window dimensions. Then, I find the largest line length.
+**	I compare that to the length of the window. If I can't fit at least the
+**	length of the longest word + 1 space, then I display an error message.
+**	If I CAN fit it, I'm going to print out each word + 1 space one by one.
+**	While printing, I'll keep a counter for each word length + 1 (for space).
+**	Once I hit <= length, I print out a new line then keep printing and
+**	printing. Should be easy enough. Right?
 */
 
 static int		term_check(void)
@@ -69,22 +80,19 @@ static void		final_print(t_arg *head)
 	{
 		if (!head->hidden && head->is_selected)
 			ft_printf("%s ", head->name);
-		head = head->next;
-		if (head->is_last)
-		{
-			if (!head->hidden)
-				ft_putchar('\n');
+		if (head && head->is_last)
 			break ;
-		}
+		head = head->next;
 	}
+	ft_putchar('\n');
 }
 
 int				main(int argc, char *argv[])
 {
+	int					clean_exit;
 	t_arg				*head;
 	t_arg				*args;
 	struct termios		old_terminal;
-
 	if (argc < 2 || !term_check())
 	{
 		if (argc < 2)
@@ -92,11 +100,13 @@ int				main(int argc, char *argv[])
 		return (1);
 	}
 	setup_term(&old_terminal);
+	get_screen_size();
 	args = init_args(argc, argv);
 	head = args;
 	print_args(args);
-	input_loop(argc, args);
+	input_loop(argc, args, &clean_exit);
 	reset_term(old_terminal);
-	final_print(head);
+	if (clean_exit)
+		final_print(head);
 	return (0);
 }

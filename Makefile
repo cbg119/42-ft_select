@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: cbagdon <cbagdon@student.42.fr>            +#+  +:+       +#+         #
+#    By: cbagdon <cbagdon@student.42.us.org>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/05 14:40:39 by cbagdon           #+#    #+#              #
-#    Updated: 2019/04/08 13:43:11 by cbagdon          ###   ########.fr        #
+#    Updated: 2019/04/11 15:08:25 by cbagdon          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,9 @@ NAME = ft_select
 SRC = main.c \
 		args.c \
 		input.c \
-		print.c
+		print.c \
+		print_utils.c \
+		resize.c
 
 INCLUDES = includes/
 
@@ -27,8 +29,8 @@ all: $(NAME)
 
 $(NAME):
 	make -C libft
-	@gcc $(FLAGS) -I $(INCLUDES) -c $(addprefix src/,$(SRC)) $(addprefix builtin/,$(BUILTIN))
-	@gcc $(Flags) -o $(NAME) $(OBJECTS) -L ./libft/ -lft -ltermcap
+	@gcc $(FLAGS) -g -I $(INCLUDES) -c $(addprefix src/,$(SRC)) $(addprefix builtin/,$(BUILTIN))
+	@gcc $(Flags) -g -o $(NAME) $(OBJECTS) -L ./libft/ -lft -ltermcap
 
 clean:
 	make -C libft clean
