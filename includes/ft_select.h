@@ -6,7 +6,7 @@
 /*   By: cbagdon <cbagdon@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 14:52:24 by cbagdon           #+#    #+#             */
-/*   Updated: 2019/04/11 15:27:34 by cbagdon          ###   ########.fr       */
+/*   Updated: 2019/04/11 17:44:11 by cbagdon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 **	INCLUDES
 */
 
+# include <sys/ioctl.h>
 # include <termcap.h>
 # include <termios.h>
 # include "../libft/includes/libft.h"
@@ -48,12 +49,6 @@ typedef struct		s_arg
 	struct s_arg	*next;
 }					t_arg;
 
-typedef struct		s_screensize
-{
-	int		length;
-	int		width;
-}					t_screensize;
-
 /*
 **	ARGS
 */
@@ -81,6 +76,13 @@ void				print_curr_and_selected(char *str);
 **	GLOBALS
 */
 
-t_screensize		g_screen;
+t_arg				*g_args;
+struct winsize		g_ws;
+
+/*
+**	SIGNALS
+*/
+
+void				resize_signal(int signo);
 
 #endif

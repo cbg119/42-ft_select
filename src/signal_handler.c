@@ -1,18 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   resize.c                                           :+:      :+:    :+:   */
+/*   signal_handler.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cbagdon <cbagdon@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/11 14:49:13 by cbagdon           #+#    #+#             */
-/*   Updated: 2019/04/11 17:43:13 by cbagdon          ###   ########.fr       */
+/*   Created: 2019/04/11 16:05:42 by cbagdon           #+#    #+#             */
+/*   Updated: 2019/04/11 16:59:28 by cbagdon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_select.h"
 
-void	get_screen_size(void)
+void	resize_signal(int signo)
 {
-	ioctl(0, TIOCGWINSZ, &g_ws);
+	if (signo == SIGWINCH)
+	{
+		clear_screen();
+		get_screen_size();
+		print_args(g_args);
+	}
 }

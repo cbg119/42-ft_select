@@ -6,7 +6,7 @@
 #    By: cbagdon <cbagdon@student.42.us.org>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/04/05 14:40:39 by cbagdon           #+#    #+#              #
-#    Updated: 2019/04/11 15:08:25 by cbagdon          ###   ########.fr        #
+#    Updated: 2019/04/11 16:13:29 by cbagdon          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,8 @@ SRC = main.c \
 		input.c \
 		print.c \
 		print_utils.c \
-		resize.c
+		resize.c \
+		signal_handler.c
 
 INCLUDES = includes/
 

@@ -6,11 +6,23 @@
 /*   By: cbagdon <cbagdon@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 13:37:25 by cbagdon           #+#    #+#             */
-/*   Updated: 2019/04/11 15:30:46 by cbagdon          ###   ########.fr       */
+/*   Updated: 2019/04/11 17:47:58 by cbagdon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_select.h"
+
+static void			print_decision(t_arg *curr)
+{
+	if (curr->is_current && !curr->is_selected)
+		print_current(curr->name);
+	else if (curr->is_selected && !curr->is_current)
+		print_selected(curr->name);
+	else if (curr->is_selected && curr->is_current)
+		print_curr_and_selected(curr->name);
+	else
+		ft_printf("%s ", curr->name);
+}
 
 static void			print_handler(t_arg *head)
 {
@@ -25,20 +37,13 @@ static void			print_handler(t_arg *head)
 		if (curr->hidden == 0)
 		{
 			i += ft_strlen(curr->name) + 1;
-			if (i > g_screen.length)
+			if (i > g_ws.ws_col)
 			{
 				i = ft_strlen(curr->name) + 1;
 				ft_putchar('\n');
 			}
-			if (curr->is_current && !curr->is_selected)
-				print_current(curr->name);
-			else if (curr->is_selected && !curr->is_current)
-				print_selected(curr->name);
-			else if (curr->is_selected && curr->is_current)
-				print_curr_and_selected(curr->name);
-			else
-				ft_printf("%s ", curr->name);
 		}
+		print_decision(curr);
 		if (curr->is_last)
 			break ;
 		curr = curr->next;
@@ -60,7 +65,7 @@ void				print_args(t_arg *head)
 			break ;
 		curr = curr->next;
 	}
-	if (arg_max + 1 > g_screen.length)
+	if (arg_max + 1 > g_ws.ws_col)
 	{
 		clear_screen();
 		ft_printf("Please resize the screen!\n");

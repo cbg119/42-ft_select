@@ -6,7 +6,7 @@
 /*   By: cbagdon <cbagdon@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/11 00:01:34 by cbagdon           #+#    #+#             */
-/*   Updated: 2019/04/11 15:09:58 by cbagdon          ###   ########.fr       */
+/*   Updated: 2019/04/11 17:48:57 by cbagdon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,8 @@ int				main(int argc, char *argv[])
 {
 	int					clean_exit;
 	t_arg				*head;
-	t_arg				*args;
 	struct termios		old_terminal;
+
 	if (argc < 2 || !term_check())
 	{
 		if (argc < 2)
@@ -101,10 +101,10 @@ int				main(int argc, char *argv[])
 	}
 	setup_term(&old_terminal);
 	get_screen_size();
-	args = init_args(argc, argv);
-	head = args;
-	print_args(args);
-	input_loop(argc, args, &clean_exit);
+	g_args = init_args(argc, argv);
+	head = g_args;
+	print_args(g_args);
+	input_loop(argc, g_args, &clean_exit);
 	reset_term(old_terminal);
 	if (clean_exit)
 		final_print(head);

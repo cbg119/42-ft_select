@@ -6,7 +6,7 @@
 /*   By: cbagdon <cbagdon@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 13:19:11 by cbagdon           #+#    #+#             */
-/*   Updated: 2019/04/11 15:27:52 by cbagdon          ###   ########.fr       */
+/*   Updated: 2019/04/11 17:49:21 by cbagdon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,9 @@
 
 static void		handle_move(int argc, long move, t_arg **curr, t_arg *head)
 {
-	int		i = 1;
+	int		i;
 
+	i = 1;
 	(*curr)->is_current = 0;
 	*curr = (move == RIGHT) ? (*curr)->next : (*curr)->prev;
 	while (i < argc && (*curr)->hidden)
@@ -58,20 +59,21 @@ static void		handle_delete(int argc, t_arg **curr, t_arg *head)
 void			input_loop(int argc, t_arg *head, int *clean_exit)
 {
 	unsigned long		c;
-	t_arg		*curr;
+	t_arg				*curr;
 
 	curr = head;
 	*clean_exit = 1;
+	signal(SIGWINCH, resize_signal);
 	while (1)
 	{
 		c = 0;
 		read(STDERR_FILENO, &c, 6);
 		if (c == ENTER)
-			break;
+			break ;
 		else if (c == ESCAPE)
 		{
 			*clean_exit = 0;
-			break;
+			break ;
 		}
 		else if (c == SPACE)
 			handle_select(curr, head);
