@@ -6,7 +6,7 @@
 /*   By: cbagdon <cbagdon@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/11 00:01:34 by cbagdon           #+#    #+#             */
-/*   Updated: 2019/04/11 17:48:57 by cbagdon          ###   ########.fr       */
+/*   Updated: 2019/04/11 17:58:35 by cbagdon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static int		term_check(void)
 	if (!term)
 		ft_printf("ft_select: error: $TERM variable not found!\n");
 	else if (!tgetent(buf, term))
-		ft_printf("ft_select: error: terminfo not foudn!\n");
+		ft_printf("ft_select: error: terminfo not found!\n");
 	else
 		return (1);
 	return (0);
