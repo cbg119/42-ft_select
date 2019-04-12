@@ -6,7 +6,7 @@
 /*   By: cbagdon <cbagdon@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 13:37:25 by cbagdon           #+#    #+#             */
-/*   Updated: 2019/04/11 17:47:58 by cbagdon          ###   ########.fr       */
+/*   Updated: 2019/04/12 13:47:13 by cbagdon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ static void			print_handler(t_arg *head)
 				i = ft_strlen(curr->name) + 1;
 				ft_putchar('\n');
 			}
+			print_decision(curr);
 		}
-		print_decision(curr);
 		if (curr->is_last)
 			break ;
 		curr = curr->next;
