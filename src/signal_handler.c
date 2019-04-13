@@ -6,13 +6,20 @@
 /*   By: cbagdon <cbagdon@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/11 16:05:42 by cbagdon           #+#    #+#             */
-/*   Updated: 2019/04/11 16:59:28 by cbagdon          ###   ########.fr       */
+/*   Updated: 2019/04/13 15:59:04 by cbagdon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_select.h"
 
-void	resize_signal(int signo)
+/*
+**	Not going to lie, I think the ioctl solution in suspend_signal is pretty
+**	weird. Anyway, I use it to mark an EOF that way a new prompt is put back
+**	out. The second signal, e.g. signal(SIGTSTP, SIG_DFL) is used to start
+**	the default behavior of CTRL-Z
+*/
+
+static void		resize_signal(int signo)
 {
 	if (signo == SIGWINCH)
 	{
@@ -20,4 +27,36 @@ void	resize_signal(int signo)
 		get_screen_size();
 		print_args(g_args);
 	}
+}
+
+static void		suspend_signal(int signo)
+{
+	char	*to_print;
+	char	buf[30];
+
+	to_print = buf;
+	if (signo == SIGTSTP)
+	{
+		reset_term();
+		clear_screen();
+		signal(SIGTSTP, SIG_DFL);
+		ioctl(STDERR_FILENO, TIOCSTI, "\x1A");
+	}
+}
+
+static void		resume_signal(int signo)
+{
+	if (signo == SIGCONT)
+	{
+		setup_term();
+		clear_screen();
+		print_args(g_args);
+	}
+}
+
+void			handle_sigs(void)
+{
+	signal(SIGWINCH, resize_signal);
+	signal(SIGTSTP, suspend_signal);
+	signal(SIGCONT, resume_signal);
 }

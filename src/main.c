@@ -6,7 +6,7 @@
 /*   By: cbagdon <cbagdon@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/11 00:01:34 by cbagdon           #+#    #+#             */
-/*   Updated: 2019/04/11 17:58:35 by cbagdon          ###   ########.fr       */
+/*   Updated: 2019/04/13 15:42:03 by cbagdon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,30 +48,29 @@ static int		term_check(void)
 	return (0);
 }
 
-static void		setup_term(struct termios *old_terminal)
+void			setup_term(void)
 {
 	char				*to_print;
 	char				buf[30];
-	struct termios		new_terminal;
 
 	to_print = buf;
+	tcgetattr(0, &g_terminals.old_terminal);
+	tcgetattr(0, &g_terminals.new_terminal);
+	g_terminals.new_terminal.c_lflag &= ~(ICANON | ECHO);
+	tcsetattr(0, TCSANOW, &g_terminals.new_terminal);
 	ft_printf(tgetstr("vi", &to_print));
 	ft_printf(tgetstr("ti", &to_print));
-	tcgetattr(0, old_terminal);
-	tcgetattr(0, &new_terminal);
-	new_terminal.c_lflag &= ~(ICANON | ECHO);
-	tcsetattr(0, TCSANOW, &new_terminal);
 }
 
-static void		reset_term(struct termios old_terminal)
+void			reset_term(void)
 {
 	char	*to_print;
 	char	buf[30];
 
 	to_print = buf;
+	tcsetattr(0, TCSANOW, &g_terminals.old_terminal);
 	ft_printf(tgetstr("ve", &to_print));
 	ft_printf(tgetstr("te", &to_print));
-	tcsetattr(0, TCSANOW, &old_terminal);
 }
 
 static void		final_print(t_arg *head)
@@ -91,7 +90,6 @@ int				main(int argc, char *argv[])
 {
 	int					clean_exit;
 	t_arg				*head;
-	struct termios		old_terminal;
 
 	if (argc < 2 || !term_check())
 	{
@@ -99,13 +97,13 @@ int				main(int argc, char *argv[])
 			ft_printf("ft_select: error: no arguments found\n");
 		return (1);
 	}
-	setup_term(&old_terminal);
+	setup_term();
 	get_screen_size();
 	g_args = init_args(argc, argv);
 	head = g_args;
 	print_args(g_args);
 	input_loop(argc, g_args, &clean_exit);
-	reset_term(old_terminal);
+	reset_term();
 	if (clean_exit)
 		final_print(head);
 	return (0);

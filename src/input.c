@@ -6,7 +6,7 @@
 /*   By: cbagdon <cbagdon@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 13:19:11 by cbagdon           #+#    #+#             */
-/*   Updated: 2019/04/12 13:48:42 by cbagdon          ###   ########.fr       */
+/*   Updated: 2019/04/13 14:43:28 by cbagdon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void			input_loop(int argc, t_arg *head, int *clean_exit)
 
 	curr = head;
 	*clean_exit = 1;
-	signal(SIGWINCH, resize_signal);
+	handle_sigs();
 	while (1)
 	{
 		c = 0;
