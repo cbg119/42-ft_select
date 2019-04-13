@@ -6,11 +6,25 @@
 /*   By: cbagdon <cbagdon@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 13:37:25 by cbagdon           #+#    #+#             */
-/*   Updated: 2019/04/12 13:47:13 by cbagdon          ###   ########.fr       */
+/*   Updated: 2019/04/13 16:32:40 by cbagdon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/ft_select.h"
+
+static void			color_decision(char *path)
+{
+	struct stat		info;
+
+	if (lstat(path, &info) == -1)
+		ft_printf(C_WHITE);
+	else if (S_ISDIR(info.st_mode))
+		ft_printf(C_BLUE);
+	else if (S_ISLNK(info.st_mode))
+		ft_printf(C_MAGENTA);
+	else if (info.st_mode & S_IXUSR)
+		ft_printf(C_RED);
+}
 
 static void			print_decision(t_arg *curr)
 {
@@ -42,7 +56,9 @@ static void			print_handler(t_arg *head)
 				i = ft_strlen(curr->name) + 1;
 				ft_putchar('\n');
 			}
+			color_decision(curr->name);
 			print_decision(curr);
+			ft_printf(C_WHITE);
 		}
 		if (curr->is_last)
 			break ;
