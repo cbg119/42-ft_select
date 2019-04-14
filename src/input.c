@@ -6,7 +6,7 @@
 /*   By: cbagdon <cbagdon@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 13:19:11 by cbagdon           #+#    #+#             */
-/*   Updated: 2019/04/13 14:43:28 by cbagdon          ###   ########.fr       */
+/*   Updated: 2019/04/13 18:38:35 by cbagdon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static void		handle_select(t_arg *curr, t_arg *head)
 	print_args(head);
 }
 
-static void		handle_delete(int argc, t_arg **curr, t_arg *head)
+static int		handle_delete(int argc, t_arg **curr, t_arg *head, int *clean_exit)
 {
 	int		i;
 
@@ -47,13 +47,19 @@ static void		handle_delete(int argc, t_arg **curr, t_arg *head)
 	(*curr)->is_selected = 0;
 	(*curr)->hidden = 1;
 	*curr = (*curr)->next;
-	while (i < argc && (*curr)->hidden)
+	while (i && (*curr)->hidden)
 	{
+		if(i == argc)
+		{
+			*clean_exit = 0;
+			return(1);
+		}
 		*curr = (*curr)->next;
 		i++;
 	}
 	(*curr)->is_current = 1;
 	print_args(head);
+	return (0);
 }
 
 void			input_loop(int argc, t_arg *head, int *clean_exit)
@@ -80,6 +86,7 @@ void			input_loop(int argc, t_arg *head, int *clean_exit)
 		else if (c == RIGHT || c == LEFT)
 			handle_move(argc, c, &curr, head);
 		else if (c == DELETE || c == DELETE2)
-			handle_delete(argc, &curr, head);
+			if (handle_delete(argc, &curr, head, clean_exit) == 1)
+				break;
 	}
 }
