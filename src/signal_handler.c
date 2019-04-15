@@ -6,7 +6,7 @@
 /*   By: cbagdon <cbagdon@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/11 16:05:42 by cbagdon           #+#    #+#             */
-/*   Updated: 2019/04/13 15:59:04 by cbagdon          ###   ########.fr       */
+/*   Updated: 2019/04/13 19:29:44 by cbagdon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,23 @@ static void		resume_signal(int signo)
 	}
 }
 
+static void		die_signal(int signo)
+{
+	(void)signo;
+	reset_term();
+	exit(0);
+}
+
 void			handle_sigs(void)
 {
 	signal(SIGWINCH, resize_signal);
 	signal(SIGTSTP, suspend_signal);
 	signal(SIGCONT, resume_signal);
+	signal(SIGINT, die_signal);
+	signal(SIGABRT, die_signal);
+	signal(SIGFPE, die_signal);
+	signal(SIGILL, die_signal);
+	signal(SIGINT, die_signal);
+	signal(SIGSEGV, die_signal);
+	signal(SIGTERM, die_signal);
 }

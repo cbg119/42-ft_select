@@ -6,7 +6,7 @@
 /*   By: cbagdon <cbagdon@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 13:37:25 by cbagdon           #+#    #+#             */
-/*   Updated: 2019/04/13 16:32:40 by cbagdon          ###   ########.fr       */
+/*   Updated: 2019/04/15 15:48:06 by cbagdon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,13 @@ static void			color_decision(char *path)
 	struct stat		info;
 
 	if (lstat(path, &info) == -1)
-		ft_printf(C_WHITE);
+		ft_putstr_fd(C_WHITE, STDERR_FILENO);
 	else if (S_ISDIR(info.st_mode))
-		ft_printf(C_BLUE);
+		ft_putstr_fd(C_BLUE, STDERR_FILENO);
 	else if (S_ISLNK(info.st_mode))
-		ft_printf(C_MAGENTA);
+		ft_putstr_fd(C_MAGENTA, STDERR_FILENO);
 	else if (info.st_mode & S_IXUSR)
-		ft_printf(C_RED);
+		ft_putstr_fd(C_RED, STDERR_FILENO);
 }
 
 static void			print_decision(t_arg *curr)
@@ -35,7 +35,22 @@ static void			print_decision(t_arg *curr)
 	else if (curr->is_selected && curr->is_current)
 		print_curr_and_selected(curr->name);
 	else
-		ft_printf("%s ", curr->name);
+	{
+		ft_putstr_fd(curr->name, STDERR_FILENO);
+		ft_putchar_fd(' ', STDERR_FILENO);
+	}
+}
+
+static void			handle_columns(void)
+{
+	g_terminals.row++;
+	if (g_terminals.row > g_ws.ws_row)
+	{
+		clear_screen();
+		ft_putstr_fd("Please resize the window!\n", STDERR_FILENO);
+	}
+	else
+		ft_putchar_fd('\n', STDERR_FILENO);
 }
 
 static void			print_handler(t_arg *head)
@@ -54,11 +69,11 @@ static void			print_handler(t_arg *head)
 			if (i > g_ws.ws_col)
 			{
 				i = ft_strlen(curr->name) + 1;
-				ft_putchar('\n');
+				handle_columns();
 			}
 			color_decision(curr->name);
-			print_decision(curr);
-			ft_printf(C_WHITE);
+			(g_terminals.row <= g_ws.ws_row) ? print_decision(curr) : 0;
+			ft_putstr_fd(C_WHITE, STDERR_FILENO);
 		}
 		if (curr->is_last)
 			break ;
@@ -72,6 +87,7 @@ void				print_args(t_arg *head)
 	t_arg		*curr;
 
 	arg_max = 0;
+	g_terminals.row = 1;
 	curr = head;
 	while (curr)
 	{
@@ -84,7 +100,7 @@ void				print_args(t_arg *head)
 	if (arg_max + 1 > g_ws.ws_col)
 	{
 		clear_screen();
-		ft_printf("Please resize the screen!\n");
+		ft_putstr_fd("Please resize the screen!\n", STDERR_FILENO);
 	}
 	else
 		print_handler(head);

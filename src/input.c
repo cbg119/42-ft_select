@@ -6,7 +6,7 @@
 /*   By: cbagdon <cbagdon@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 13:19:11 by cbagdon           #+#    #+#             */
-/*   Updated: 2019/04/13 18:38:35 by cbagdon          ###   ########.fr       */
+/*   Updated: 2019/04/15 15:30:27 by cbagdon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ static void		handle_select(t_arg *curr, t_arg *head)
 	print_args(head);
 }
 
-static int		handle_delete(int argc, t_arg **curr, t_arg *head, int *clean_exit)
+static int		handle_delete(int argc, t_arg **curr, t_arg *head,
+int *clean_exit)
 {
 	int		i;
 
@@ -49,10 +50,10 @@ static int		handle_delete(int argc, t_arg **curr, t_arg *head, int *clean_exit)
 	*curr = (*curr)->next;
 	while (i && (*curr)->hidden)
 	{
-		if(i == argc)
+		if (i == argc)
 		{
 			*clean_exit = 0;
-			return(1);
+			return (1);
 		}
 		*curr = (*curr)->next;
 		i++;
@@ -87,6 +88,6 @@ void			input_loop(int argc, t_arg *head, int *clean_exit)
 			handle_move(argc, c, &curr, head);
 		else if (c == DELETE || c == DELETE2)
 			if (handle_delete(argc, &curr, head, clean_exit) == 1)
-				break;
+				break ;
 	}
 }

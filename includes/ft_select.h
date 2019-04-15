@@ -6,7 +6,7 @@
 /*   By: cbagdon <cbagdon@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/05 14:52:24 by cbagdon           #+#    #+#             */
-/*   Updated: 2019/04/13 15:59:09 by cbagdon          ###   ########.fr       */
+/*   Updated: 2019/04/13 19:17:49 by cbagdon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ typedef struct			s_arg
 
 typedef struct			s_terminal_settings
 {
+	int					row;
 	struct termios		old_terminal;
 	struct termios		new_terminal;
 }						t_terminal_settings;

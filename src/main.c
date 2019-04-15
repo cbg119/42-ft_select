@@ -6,7 +6,7 @@
 /*   By: cbagdon <cbagdon@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/11 00:01:34 by cbagdon           #+#    #+#             */
-/*   Updated: 2019/04/13 15:42:03 by cbagdon          ###   ########.fr       */
+/*   Updated: 2019/04/15 15:49:48 by cbagdon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,11 @@ static int		term_check(void)
 
 	term = getenv("TERM");
 	if (!term)
-		ft_printf("ft_select: error: $TERM variable not found!\n");
+		ft_putstr_fd("ft_select: error: $TERM variable not found!\n",
+		STDERR_FILENO);
 	else if (!tgetent(buf, term))
-		ft_printf("ft_select: error: terminfo not found!\n");
+		ft_putstr_fd("ft_select: error: terminfo not found!\n",
+		STDERR_FILENO);
 	else
 		return (1);
 	return (0);
@@ -54,12 +56,13 @@ void			setup_term(void)
 	char				buf[30];
 
 	to_print = buf;
-	tcgetattr(0, &g_terminals.old_terminal);
-	tcgetattr(0, &g_terminals.new_terminal);
+	tcgetattr(STDERR_FILENO, &g_terminals.old_terminal);
+	tcgetattr(STDERR_FILENO, &g_terminals.new_terminal);
 	g_terminals.new_terminal.c_lflag &= ~(ICANON | ECHO);
-	tcsetattr(0, TCSANOW, &g_terminals.new_terminal);
-	ft_printf(tgetstr("vi", &to_print));
-	ft_printf(tgetstr("ti", &to_print));
+	tcsetattr(STDERR_FILENO, TCSANOW, &g_terminals.new_terminal);
+	ft_putstr_fd(tgetstr("vi", &to_print), STDERR_FILENO);
+	ft_putstr_fd(tgetstr("ti", &to_print), STDERR_FILENO);
+	g_terminals.row = 1;
 }
 
 void			reset_term(void)
@@ -68,9 +71,9 @@ void			reset_term(void)
 	char	buf[30];
 
 	to_print = buf;
-	tcsetattr(0, TCSANOW, &g_terminals.old_terminal);
-	ft_printf(tgetstr("ve", &to_print));
-	ft_printf(tgetstr("te", &to_print));
+	tcsetattr(STDERR_FILENO, TCSANOW, &g_terminals.old_terminal);
+	ft_putstr_fd(tgetstr("ve", &to_print), STDERR_FILENO);
+	ft_putstr_fd(tgetstr("te", &to_print), STDERR_FILENO);
 }
 
 static void		final_print(t_arg *head)
@@ -94,7 +97,8 @@ int				main(int argc, char *argv[])
 	if (argc < 2 || !term_check())
 	{
 		if (argc < 2)
-			ft_printf("ft_select: error: no arguments found\n");
+			ft_putstr_fd("ft_select: error: no arguments found\n",
+			STDERR_FILENO);
 		return (1);
 	}
 	setup_term();
@@ -105,6 +109,6 @@ int				main(int argc, char *argv[])
 	input_loop(argc, g_args, &clean_exit);
 	reset_term();
 	if (clean_exit)
-		final_print(head);
+		final_print(g_args);
 	return (0);
 }
