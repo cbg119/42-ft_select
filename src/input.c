@@ -6,7 +6,7 @@
 /*   By: cbagdon <cbagdon@student.42.us.org>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 13:19:11 by cbagdon           #+#    #+#             */
-/*   Updated: 2019/04/15 15:30:27 by cbagdon          ###   ########.fr       */
+/*   Updated: 2019/04/16 12:41:41 by cbagdon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,21 @@ static void		handle_move(int argc, long move, t_arg **curr, t_arg *head)
 	print_args(head);
 }
 
-static void		handle_select(t_arg *curr, t_arg *head)
+static void		handle_select(int argc, t_arg **curr, t_arg *head)
 {
-	curr->is_selected *= -1;
-	curr->is_selected += 1;
+	int		i;
+
+	i = 1;
+	(*curr)->is_current = 0;
+	(*curr)->is_selected *= -1;
+	(*curr)->is_selected += 1;
+	(*curr) = (*curr)->next;
+	while (i < argc && (*curr)->hidden)
+	{
+		i++;
+		*curr = (*curr)->next;
+	}
+	(*curr)->is_current = 1;
 	print_args(head);
 }
 
@@ -47,7 +58,7 @@ int *clean_exit)
 	i = 1;
 	(*curr)->is_selected = 0;
 	(*curr)->hidden = 1;
-	*curr = (*curr)->next;
+	*curr = (*curr)->prev;
 	while (i && (*curr)->hidden)
 	{
 		if (i == argc)
@@ -55,7 +66,7 @@ int *clean_exit)
 			*clean_exit = 0;
 			return (1);
 		}
-		*curr = (*curr)->next;
+		*curr = (*curr)->prev;
 		i++;
 	}
 	(*curr)->is_current = 1;
@@ -83,7 +94,7 @@ void			input_loop(int argc, t_arg *head, int *clean_exit)
 			break ;
 		}
 		else if (c == SPACE)
-			handle_select(curr, head);
+			handle_select(argc, &curr, head);
 		else if (c == RIGHT || c == LEFT)
 			handle_move(argc, c, &curr, head);
 		else if (c == DELETE || c == DELETE2)
