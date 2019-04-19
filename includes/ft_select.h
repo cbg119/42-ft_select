@@ -17,6 +17,7 @@
 **	INCLUDES
 */
 
+# include <signal.h>
 # include <sys/ioctl.h>
 # include <termcap.h>
 # include <termios.h>

@@ -92,7 +92,7 @@ static void		final_print(t_arg *head)
 int				main(int argc, char *argv[])
 {
 	int					clean_exit;
-	t_arg				*head;
+    t_arg               *head;
 
 	if (argc < 2 || !term_check())
 	{
@@ -109,6 +109,6 @@ int				main(int argc, char *argv[])
 	input_loop(argc, g_args, &clean_exit);
 	reset_term();
 	if (clean_exit)
-		final_print(g_args);
+		final_print(head);
 	return (0);
 }

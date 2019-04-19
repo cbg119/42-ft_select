@@ -31,10 +31,6 @@ static void		resize_signal(int signo)
 
 static void		suspend_signal(int signo)
 {
-	char	*to_print;
-	char	buf[30];
-
-	to_print = buf;
 	if (signo == SIGTSTP)
 	{
 		reset_term();
